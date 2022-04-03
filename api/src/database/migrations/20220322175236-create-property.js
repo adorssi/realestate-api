@@ -16,7 +16,15 @@ module.exports = {
         type: Sequelize.STRING
       },
       currency_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DataTypes.INTEGER,
+        references: {
+          model: {
+            tableName: 'currencies',
+            key: 'id'
+          }
+        },
+        //onUpdate: 'cascade',
+        //onDelete: 'cascade'
       },
       price: {
           type: Sequelize.DECIMAL(10,2),
@@ -50,7 +58,7 @@ module.exports = {
           type: Sequelize.STRING(450),
           allowNull: false,
       },
-      images: {
+      mainImage: {
           type: Sequelize.STRING,
       },
       published: {
@@ -66,10 +74,26 @@ module.exports = {
           type: Sequelize.STRING,
       },
       city_id: {
-          type: Sequelize.INTEGER,
+        type: Sequelize.DataTypes.INTEGER,
+        references: {
+          model: {
+            tableName: 'cities',
+            key: 'id'
+        },
+        //onUpdate: 'cascade',
+        //onDelete: 'cascade'
+        }
       },
       type_id: {
-          type: Sequelize.INTEGER,
+        type: Sequelize.DataTypes.INTEGER,
+        references: {
+          model: {
+            tableName: 'types',
+            key: 'id'
+          },
+          //onUpdate: 'cascade',
+          //onDelete: 'cascade'
+        }
       },
       createdAt: {
         allowNull: false,
@@ -77,6 +101,9 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE
+      },
+      isDeleted: {
         type: Sequelize.DATE
       }
     });

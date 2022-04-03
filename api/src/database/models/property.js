@@ -10,7 +10,19 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+        // define association here
+        Property.belongsTo(models.Currency, {
+            foreignKey: 'currency_id',
+            as: 'currency'
+        });
+        Property.belongsTo(models.City, {
+            foreignKey: 'city_id',
+            as: 'city'
+        });
+        Property.belongsTo(models.Type, {
+            foreignKey: 'type_id',
+            as: 'type'
+        });
     }
   };
   Property.init({
@@ -56,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(450),
         allowNull: false,
     },
-    images: {
+    mainImage: {
         type: DataTypes.STRING,
     },
     published: {
@@ -85,6 +97,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
+    paranoid: true,
+    deletedAt: 'isDeleted',
     modelName: 'Property',
   });
   return Property;
