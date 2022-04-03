@@ -10,7 +10,7 @@ router.post('/add', propertyController.add);
 
 router.patch('/:id', propertyController.update);
 
-router.delete('/s/:id', propertyController.delete);
+router.delete('/s/:id', propertyController.softDelete);
 router.delete('/h/:id', propertyController.hardDelete);
 router.get('/restore/:id', propertyController.restore);
 
