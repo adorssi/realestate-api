@@ -1,14 +1,14 @@
 const db = require('../src/database/models');
 
-const currencyController = {
+const propertyTypesController = {
     listAll: async (req, res) => {
             
         try {
-            const currency = await db.Currency.findAll();
+            const type = await db.Type.findAll();
 
             res.status(200).json({
-                count: currency.length,
-                data: currency
+                count: type.length,
+                data: type
             })
         } catch (error) {
             console.log(error);
@@ -19,17 +19,17 @@ const currencyController = {
         const {id} = req.params;
 
         try {
-            const currency = await db.Currency.findByPk(id);
+            const type = await db.Type.findByPk(id);
             
-            if(currency) {
+            if(type) {
                 return res.status(200).json({
-                    data: currency
+                    data: type
                 });
             }
 
             res.status(404).json({
                 result: false,
-                message: 'Currency not found'
+                message: 'Property type not found'
             });
             
         } catch (error) {
@@ -38,24 +38,23 @@ const currencyController = {
     },
     add: async (req, res) => {
                 
-        const {name, symbol} = req.body;
+        const {name} = req.body;
 
         try {
-            const currency = await db.Currency.create({
-                name,
-                symbol
+            const type = await db.Type.create({
+                name
             });
             
-            if(currency) {
+            if(type) {
                 return res.status(200).json({
-                    message: 'Currency created successfully',
-                    data: currency
+                    message: 'Property type created successfully',
+                    data: type
                 });
             }
 
             res.status(404).json({
                 result: false,
-                message: 'The currency could not be created',
+                message: 'The property type could not be created',
             });
             
         } catch (error) {
@@ -65,28 +64,27 @@ const currencyController = {
     update: async (req, res) => {
             
         const {id} = req.params;
-        const {name, symbol} = req.body;
+        const {name} = req.body;
         
         try {
-            const currency = await db.Currency.update({
-                name,
-                symbol
+            const type = await db.Type.update({
+                name
             }, {
                 where: {
                     id
                 }
             });
             
-            if(currency) {
+            if(type) {
                 return res.status(200).json({
                     result: true,
-                    message: 'The currency has been updated',
+                    message: 'The property type has been updated',
                 });
             }
         
             res.status(404).json({
                 result: false,
-                message: 'Curreny not found',
+                message: 'Property type not found',
             });
             
         } catch (error) {
@@ -96,18 +94,18 @@ const currencyController = {
     hardDelete: async (req, res) => {
                 
         const {id} = req.params;
-        const currency = await db.Currency.findByPk(id);
+        const type = await db.Type.findByPk(id);
 
-        if(currency) {
+        if(type) {
             try {
-                await db.Currency.destroy({
+                await db.Type.destroy({
                     where: { id },
                     force: true
                 });
                 
                 return res.status(200).json({
                     result: true,
-                    message: 'The currency has been deleted'
+                    message: 'The property type has been deleted'
                 });
                 
             } catch (error) {
@@ -116,9 +114,9 @@ const currencyController = {
         }
         res.status(404).json({
             result: false,
-            message: 'Currency not found'
+            message: 'Property type not found'
         });
     },
 }
 
-module.exports = currencyController;
+module.exports = propertyTypesController;
