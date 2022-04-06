@@ -7,11 +7,15 @@ const cityController = {
             const cities = await db.City.findAll();
 
             res.status(200).json({
+                success: true,
                 count: cities.length,
                 data: cities
             })
         } catch (error) {
-            console.log(error);
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
         }
     },
     getOne: async (req, res) => {
@@ -23,17 +27,21 @@ const cityController = {
             
             if(city) {
                 return res.status(200).json({
+                    success: true,
                     data: city
                 });
             }
 
             res.status(404).json({
-                result: false,
+                success: false,
                 message: 'City not found'
             });
             
         } catch (error) {
-            console.log(error);
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
         }
     },
     add: async (req, res) => {
@@ -47,17 +55,21 @@ const cityController = {
             
             if(city) {
                 return res.status(200).json({
+                    success: true,
                     data: city
                 });
             }
 
             res.status(404).json({
-                result: false,
+                success: false,
                 message: 'City not found',
             });
             
         } catch (error) {
-            console.log(error);
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
         }
     },
     update: async (req, res) => {
@@ -76,18 +88,21 @@ const cityController = {
             
             if(city) {
                 return res.status(200).json({
-                    result: true,
+                    success: true,
                     message: 'The city has been updated',
                 });
             }
         
             res.status(404).json({
-                result: false,
+                success: false,
                 message: 'City not found'
             });
             
         } catch (error) {
-            console.log(error);
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
         }
     },
     hardDelete: async (req, res) => {
@@ -103,16 +118,19 @@ const cityController = {
                 });
                 
                 return res.status(200).json({
-                    result: true,
+                    success: true,
                     message: 'The city has been deleted'
                 });
                 
             } catch (error) {
-                console.log(error);
+                res.status(500).json({
+                success: false,
+                message: error.message
+            });
             }
         }
         res.status(404).json({
-            result: false,
+            success: false,
             message: 'City not found'
         });
     },

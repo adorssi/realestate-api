@@ -7,11 +7,15 @@ const currencyController = {
             const currency = await db.Currency.findAll();
 
             res.status(200).json({
+                success: true,
                 count: currency.length,
                 data: currency
             })
         } catch (error) {
-            console.log(error);
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
         }
     },
     getOne: async (req, res) => {
@@ -23,17 +27,21 @@ const currencyController = {
             
             if(currency) {
                 return res.status(200).json({
+                    success: true,
                     data: currency
                 });
             }
 
             res.status(404).json({
-                result: false,
+                sucess: false,
                 message: 'Currency not found'
             });
             
         } catch (error) {
-            console.log(error);
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
         }
     },
     add: async (req, res) => {
@@ -48,18 +56,22 @@ const currencyController = {
             
             if(currency) {
                 return res.status(200).json({
+                    success: true,
                     message: 'Currency created successfully',
                     data: currency
                 });
             }
 
             res.status(404).json({
-                result: false,
+                success: false,
                 message: 'The currency could not be created',
             });
             
         } catch (error) {
-            console.log(error);
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
         }
     },
     update: async (req, res) => {
@@ -79,18 +91,21 @@ const currencyController = {
             
             if(currency) {
                 return res.status(200).json({
-                    result: true,
+                    success: true,
                     message: 'The currency has been updated',
                 });
             }
         
             res.status(404).json({
-                result: false,
+                success: false,
                 message: 'Curreny not found',
             });
             
         } catch (error) {
-            console.log(error);
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
         }
     },
     hardDelete: async (req, res) => {
@@ -106,16 +121,19 @@ const currencyController = {
                 });
                 
                 return res.status(200).json({
-                    result: true,
+                    success: true,
                     message: 'The currency has been deleted'
                 });
                 
             } catch (error) {
-                console.log(error);
+                res.status(500).json({
+                    success: false,
+                    message: error.message
+                });
             }
         }
         res.status(404).json({
-            result: false,
+            success: false,
             message: 'Currency not found'
         });
     },

@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+var cors = require('cors')
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -12,11 +13,13 @@ const propertyRouter = require('./routes/propertyRouter');
 const cityRouter = require('./routes/cityRouter');
 const currencyRouter = require('./routes/currencyRouter');
 const propertyTypesRouter = require('./routes/propertyTypesRouter');
+const userRouter = require('./routes/userRouter');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -27,6 +30,7 @@ app.use('/api/property', propertyRouter);
 app.use('/api/city', cityRouter);
 app.use('/api/currency', currencyRouter);
 app.use('/api/propertytype', propertyTypesRouter);
+app.use('/api/user', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

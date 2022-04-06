@@ -23,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'type_id',
             as: 'type'
         });
+        Property.belongsTo(models.User, {
+            foreignKey: 'user_id',
+            as: 'user'
+        });
     }
   };
   Property.init({

@@ -7,11 +7,15 @@ const propertyController = {
             const properties = await db.Property.findAll();
 
             res.status(200).json({
+                success: true,
                 count: properties.length,
                 data: properties
             })
         } catch (error) {
-            console.log(error);
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
         }
     },
     listAllPublished: async (req, res) => {
@@ -24,11 +28,15 @@ const propertyController = {
             });
 
             res.status(200).json({
+                success: true,
                 count: properties.length,
                 data: properties
             })
         } catch (error) {
-            console.log(error);
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
         }
     },
     getOne: async (req, res) => {
@@ -40,16 +48,21 @@ const propertyController = {
             
             if(property) {
                 return res.status(200).json({
+                    success: true,
                     data: property
                 });
             }
 
             res.status(404).json({
+                success: false,
                 message: 'Property not found',
                 data: null});
             
         } catch (error) {
-            console.log(error);
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
         }
     },
     add: async (req, res) => {
@@ -95,12 +108,15 @@ const propertyController = {
                 });
 
                 res.status(200).json({
-                    message: 'success',
+                    success: true,
                     newProperty
                 });
 
             } catch (error) {
-                console.log(error);
+                res.status(500).json({
+                    success: false,
+                    message: error.message
+                });
             }
     },
     update: async (req, res) => {
@@ -151,15 +167,20 @@ const propertyController = {
                         where: { id }
                     });
                     return res.status(200).json({
+                        success: true,
                         message: 'The property has been updated',
                         updateProperty: await db.Property.findByPk(id)
                     });
 
                 } catch (error) {
-                    console.log(error);
+                    res.status(500).json({
+                        success: false,
+                        message: error.message
+                    });
                 }
         }
         return res.status(404).json({
+            success: false,
             message: 'Property not found', 
         });
         
@@ -176,19 +197,28 @@ const propertyController = {
                     where: {id}
                 });
                 return res.status(200).json({
+                    success: true,
                     message: 'The property has been deleted'
                 });
             } catch (error) {
-                console.log(error);
+                res.status(500).json({
+                    success: false,
+                    message: error.message
+                });
             }
         }
 
-        return res.status(404).json({ message: 'Property not found' });
+        return res.status(404).json({
+            success: false,
+            message: 'Property not found'
+        });
     },
     hardDelete: async (req, res) => {
         const id = req.params.id;
 
-        const property = await db.Property.findByPk(id);
+        const property = await db.Property.findByPk(id, {
+            paranoid: false
+        });
 
         if(property) {
             try {
@@ -197,10 +227,14 @@ const propertyController = {
                     force: true
                 });
                 return res.status(200).json({
+                    success: true,
                     message: 'The property has been deleted'
                 });
             } catch (error) {
-                console.log(error);
+                res.status(500).json({
+                    success: false,
+                    message: error.message
+                });
             }
         }
 
@@ -219,13 +253,20 @@ const propertyController = {
                     where: {id}
                 });
                 return res.status(200).json({
+                    success: true,
                     message: 'The property has been restored'
                 });
             } catch (error) {
-                console.log(error);
+                res.status(500).json({
+                    success: false,
+                    message: error.message
+                });
             }
         }
-        return res.status(404).json({ message: 'Property not found' });
+        return res.status(404).json({ 
+            success: false,
+            message: 'Property not found'
+        });
     },
 }
 
