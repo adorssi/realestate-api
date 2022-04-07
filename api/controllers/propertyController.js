@@ -39,12 +39,44 @@ const propertyController = {
             });
         }
     },
+    listAllFeatured: async (req, res) => {
+
+        try {
+            const properties = await db.Property.findAll({
+                where: {
+                    featured: true
+                },
+                include: [
+                    {association: 'city'},
+                    {association: 'currency'},
+                    {association: 'type'}
+                ],
+            });
+
+            res.status(200).json({
+                success: true,
+                count: properties.length,
+                data: properties
+            })
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
+        }
+    },
     getOne: async (req, res) => {
 
         const {id} = req.params;
 
         try {
-            const property = await db.Property.findByPk(id);
+            const property = await db.Property.findByPk(id, {
+                include: [
+                    {association: 'city'},
+                    {association: 'currency'},
+                    {association: 'type'}
+                ],
+            });
             
             if(property) {
                 return res.status(200).json({
