@@ -5,6 +5,7 @@ const propertyController = require('../controllers/propertyController');
 router.get('/', propertyController.listAll);
 router.get('/published', propertyController.listAllPublished);
 router.get('/featured', propertyController.listAllFeatured);
+router.get('/detail', propertyController.detail);
 router.get('/:id', propertyController.getOne);
 router.get('/restore/:id', propertyController.restore);
 

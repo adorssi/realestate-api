@@ -27,6 +27,12 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'user_id',
             as: 'user'
         });
+        Property.belongsToMany(models.Amenitie, {
+            as: 'amenitie',
+            through: 'PropertyAmenitie',
+            foreignKey: 'property_id',
+            otherKey: 'amenitie_id'
+        })
     }
   };
   Property.init({
