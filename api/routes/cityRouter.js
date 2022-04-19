@@ -3,6 +3,7 @@ const router = express.Router();
 const cityController = require('../controllers/cityController');
 
 router.get('/', cityController.listAll);
+//router.get('/withProperties', cityController.listOnlyWithProperties);
 router.get('/:id', cityController.getOne);
 
 router.post('/add', cityController.add);

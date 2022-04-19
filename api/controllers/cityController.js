@@ -18,6 +18,28 @@ const cityController = {
             });
         }
     },
+    /* listOnlyWithProperties: async (req, res) => {
+            
+        try {
+            const cities = await db.City.findAll({
+                include: [{
+                    association: 'properties',
+                    required: true
+                }]
+            });
+
+            res.status(200).json({
+                success: true,
+                count: cities.length,
+                data: cities
+            })
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
+        }
+    }, */
     getOne: async (req, res) => {
             
         const {id} = req.params;

@@ -1,63 +1,57 @@
 const db = require("../src/database/models");
+const { Op } = require("sequelize");
+const { QueryTypes } = require('sequelize');
+const sequelize = require("../src/database/models").sequelize;
 
 const propertyController = {
+  citiesHaveProperties: async (req, res) => {
+    try {
+      const cities = await sequelize.query('SELECT distinct cities.id AS cityId, cities.name FROM properties INNER JOIN cities ON cities.id = properties.city_id', { type: QueryTypes.SELECT });
+      res.status(200).json(cities);
+    } catch (error) {
+      console.log(error);
+    }
+
+  },
   listAll: async (req, res) => {
-    try {
-      const properties = await db.Property.findAll();
+    const { cityId, published, featured } = req.query;
 
-      res.status(200).json({
-        success: true,
-        count: properties.length,
-        data: properties,
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
-    }
-  },
-  listAllPublished: async (req, res) => {
     try {
       const properties = await db.Property.findAll({
-        where: {
-          published: true,
-        },
-      });
-
-      res.status(200).json({
-        success: true,
-        count: properties.length,
-        data: properties,
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: error.message,
-      });
-    }
-  },
-  listAllFeatured: async (req, res) => {
-    try {
-      const properties = await db.Property.findAll({
-        where: {
-          featured: true,
-        },
         include: [
-          { association: "city" },
-          { association: "currency" },
+          { association: "city", required: true },
+          { association: "currency", required: true },
           { association: "type" },
-          { association: "amenitie" }
+          { association: "amenitie" },
         ],
+        where: {
+          [Op.and]: [
+            {
+              city_id: {
+                [Op.like]: cityId || "%",
+              },
+            },
+            {
+              published: {
+                [Op.like]: published ? true : "%",
+              },
+            },
+            {
+              featured: {
+                [Op.like]: featured ? true : "%",
+              },
+            },
+          ],
+        },
       });
 
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         count: properties.length,
         data: properties,
       });
     } catch (error) {
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
         message: error.message,
       });
@@ -72,7 +66,7 @@ const propertyController = {
           { association: "city" },
           { association: "currency" },
           { association: "type" },
-          { association: "amenitie" }
+          { association: "amenitie" },
         ],
       });
 
@@ -104,7 +98,7 @@ const propertyController = {
           { association: "city" },
           { association: "currency" },
           { association: "type" },
-          { association: "amenitie" }
+          { association: "amenitie" },
         ],
       });
 
@@ -149,7 +143,7 @@ const propertyController = {
     try {
       let newProperty = await db.Property.create({
         title: req.body.title,
-        ref: Number(req.body.ref),
+        ref: req.body.ref,
         currency_id: Number(req.body.currency_id),
         price: Number(req.body.price),
         financing: Number(req.body.financing),
